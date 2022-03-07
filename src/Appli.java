@@ -27,7 +27,7 @@ public class Appli {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
         frame.setVisible(true);
-        frame.add(new JLabel(new ImageIcon(".\\images\\motos\\" + s)));
+        frame.add(new JLabel(new ImageIcon("..\\images\\motos\\" + s)));
 
         // Créer des boutons radio
         ButtonGroup group = new ButtonGroup();
@@ -72,7 +72,7 @@ public class Appli {
                 Set<Double> keys = imgSimilaires.keySet();
                 int i = 0;
                 for(Double key: keys){
-                    frame.add(new JLabel(new ImageIcon(".\\images\\motos\\"
+                    frame.add(new JLabel(new ImageIcon("..\\images\\motos\\"
                             + imgSimilaires.get(key))));
                     System.out.println("La distance de similarité " + imgSimilaires.get(key) + " est: " + key);
                     if(++i >= 10)
