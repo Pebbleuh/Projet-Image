@@ -9,8 +9,6 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import static histogramme.HistogramTools.creerHistoHSV;
-
 public class Repertoire {
 
     /**
@@ -36,6 +34,7 @@ public class Repertoire {
         Image imgRef = ImageLoader.exec("..\\images\\motos\\" + s);
         int nbPixels = imgRef.getXDim() * imgRef.getYDim();
         imgRef = Traitement.filtreMedian(imgRef);
+        double seuil = methode.equals("RGB")?0.8:200000;
 
         // créer histo de l'image ref
         double[][] histoRef = getHistoDB(s, methode);
@@ -64,7 +63,9 @@ public class Repertoire {
                     similarite += Traitement.distanceSimilarite(histoRef[j],histo[j]);
                 }
 
-                imgSimilaires.put(similarite, listeImg[i]);
+                // si dépasse le seuil de similarité on enregistre pas l'image
+                if(similarite < seuil)
+                    imgSimilaires.put(similarite, listeImg[i]);
             }
         }
 
@@ -98,8 +99,8 @@ public class Repertoire {
      */
     public static double[] stringToHisto(String s) {
         if(s != null){
-            String[] histoString = s.split(";");
-            double[] histo = new double[128];
+            String[] histoString = s.split(";"); // histo de la bd
+            double[] histo = new double[histoString.length];
             for (int i = 0; i < histoString.length; ++i) {
                 histo[i] = Double.parseDouble(histoString[i]);
             }

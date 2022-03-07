@@ -4,7 +4,6 @@ import traitement.Traitement;
 import java.awt.Color;
 import java.io.*;
 
-import fr.unistra.pelican.algorithms.io.ImageLoader;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartUtilities;

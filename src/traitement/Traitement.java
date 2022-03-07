@@ -2,9 +2,6 @@ package traitement;
 
 import fr.unistra.pelican.ByteImage;
 import fr.unistra.pelican.Image;
-import fr.unistra.pelican.algorithms.io.ImageLoader;
-import fr.unistra.pelican.algorithms.noise.Speckle;
-import fr.unistra.pelican.algorithms.visualisation.Viewer2D;
 
 import java.util.ArrayList;
 import java.util.Collections;

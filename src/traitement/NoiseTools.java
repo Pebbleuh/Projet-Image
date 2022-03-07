@@ -1,12 +1,7 @@
 package traitement;
 
-import java.io.IOException;
-
 import fr.unistra.pelican.Image;
-import fr.unistra.pelican.algorithms.io.ImageLoader;
 import fr.unistra.pelican.algorithms.noise.Speckle;
-import fr.unistra.pelican.algorithms.visualisation.Viewer2D;
-
 
 public class NoiseTools {
 
