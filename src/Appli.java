@@ -1,15 +1,13 @@
 import database.Repertoire;
-import fr.unistra.pelican.Image;
-import fr.unistra.pelican.algorithms.io.ImageLoader;
-import fr.unistra.pelican.algorithms.visualisation.Viewer2D;
+import javax.swing.*;
+import java.awt.*;
 
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
 public class Appli {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String[] images = Repertoire.getListImg();
 
@@ -24,30 +22,64 @@ public class Appli {
                     exist = true;
         } while(!exist);
 
-        // choisir la méthode de comparaison
-        String methode;
-        do {
-            System.out.print("Veuillez choisir la méthode de comparaison (RGB ou HSV) : ");
-            methode = in.nextLine().toUpperCase(); // RGB || HSV
-        } while(!(methode.equals("RGB") || methode.equals("HSV")));
+        // Création GUI
+        JFrame frame = new JFrame("Comparaison d'images");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 800);
+        frame.setVisible(true);
+        frame.add(new JLabel(new ImageIcon(".\\images\\motos\\" + s)));
 
-        TreeMap<Double, String> imgSimilaires = Repertoire.getImgSimilaires(s, images, methode);
+        // Créer des boutons radio
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton radio1 = new JRadioButton("RGB", true);
+        JRadioButton radio2 = new JRadioButton("HSV", false);
+        group.add(radio1); // Ajouter les boutons radio au groupe
+        group.add(radio2);
+        JLabel nomImg = new JLabel("Nom de l'image : " + s + "\n");
+        JLabel choixMethode = new JLabel("Choisissez la méthode de comparaison : \n", JLabel.CENTER);
+        JButton btnCalcul = new JButton("Calculer");
 
-        Image imgRef = ImageLoader.exec("..\\images\\motos\\" + s);
-        imgRef.setColor(true);
-        Viewer2D.exec(imgRef); // affichage de l'image demandée
+        // Création de panels + ajout des composants aux panels
+        JPanel panel1 = new JPanel();
+        JPanel panel2 = new JPanel();
+        panel1.add(nomImg);
+        panel2.add(choixMethode);
+        panel2.add(radio1);
+        panel2.add(radio2);
+        panel2.add(btnCalcul);
+        
+        // Ajouter panels au frame
+        frame.setLayout(new GridLayout(2,2));
+        frame.add(panel1);
+        frame.add(panel2);
+        frame.pack();
 
-        // affichage images similaires
-        Set<Double> keys = imgSimilaires.keySet();
+        String finalS = s; // nom de l'image à utiliser dans l'action
+        String methode = ""; // choisir la méthode de comparaison
+        
+        // Action déclenchée par btnCalcul
+        btnCalcul.addActionListener(e -> { // équivalent à new ActionListener()
+            Object source = e.getSource(); // verifier la source de l'action
+            if (source == btnCalcul) { // action a effectuer
+                if (radio1.isSelected()) {
+                    methode.equals("RGB");
+                } else if (radio2.isSelected()) {
+                    methode.equals("HSV");
+                }
+                TreeMap<Double, String> imgSimilaires = Repertoire.getImgSimilaires(finalS, images, methode);
 
-        int i = 0;
-        for(Double key: keys){
-            Image img = ImageLoader.exec("..\\images\\motos\\" + imgSimilaires.get(key));
-            Viewer2D.exec(img);
-            System.out.println("La distance de similarité " + imgSimilaires.get(key) + " est: " + key);
-            if(++i >= 10)
-                break;
-        }
+                // affichage images similaires
+                Set<Double> keys = imgSimilaires.keySet();
+                int i = 0;
+                for(Double key: keys){
+                    frame.add(new JLabel(new ImageIcon(".\\images\\motos\\"
+                            + imgSimilaires.get(key))));
+                    System.out.println("La distance de similarité " + imgSimilaires.get(key) + " est: " + key);
+                    if(++i >= 10)
+                        break;
+                }
+            }
+        });
 
     }
 }
